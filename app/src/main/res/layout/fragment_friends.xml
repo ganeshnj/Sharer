@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView_friends"
-        tools:listitem="@layout/row_layout_friends">
+        tools:listitem="@layout/row_layout_friends_check">
     </ListView>
 
 </LinearLayout>

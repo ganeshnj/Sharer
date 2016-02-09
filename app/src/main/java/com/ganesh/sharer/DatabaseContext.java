@@ -128,5 +128,16 @@ public class DatabaseContext {
         return false;
     }
 
+    public static boolean addGroup(String title, String description, ArrayList<User> groupMembers) {
+        Group group = new Group(title, description, groupMembers);
+        getGroups().add(group);
+        return true;
+    }
+
+    public static boolean addGroup(Group group) {
+        getGroups().add(group);
+        return true;
+    }
+
 
 }

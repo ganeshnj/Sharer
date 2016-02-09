@@ -1,6 +1,7 @@
 package com.ganesh.sharer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -131,7 +132,10 @@ public class FriendsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.edit:
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EditFriendFragment.newInstance(user.getUserId())).commitAllowingStateLoss();
+                // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EditFriendFragment.newInstance(user.getUserId())).commitAllowingStateLoss();
+                Intent intent = new Intent(getActivity(), EditFriendActivity.class);
+                intent.putExtra(EditFriendActivity.ARG_USER_ID, user.getUserId());
+                getActivity().startActivity(intent);
                 break;
             case R.id.delete:
                 DatabaseContext context = new DatabaseContext();

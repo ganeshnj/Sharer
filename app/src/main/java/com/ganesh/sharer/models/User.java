@@ -128,4 +128,8 @@ public class User implements Parcelable {
         builder.append(" Email:" + getEmail());
         return builder.toString();
     }
+
+    public String getFormatted() {
+        return firstname + " " + lastname + " (" + email + ")";
+    }
 }

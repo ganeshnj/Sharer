@@ -1,5 +1,6 @@
 package com.ganesh.sharer;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -24,8 +25,10 @@ public class MainActivity extends AppCompatActivity
 
     private DatabaseContext mDatabaseContext = new DatabaseContext();
 
-    FloatingActionMenu mFamAdd;
-    FloatingActionButton mFabAddFriend;
+    private FloatingActionMenu mFamAdd;
+    private FloatingActionButton mFabAddFriend;
+    private FloatingActionButton mFabAddGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,18 @@ public class MainActivity extends AppCompatActivity
         mFabAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, AddFriendFragment.newInstance()).commitAllowingStateLoss();
+                Intent intent = new Intent(MainActivity.this, AddFriendActivity.class);
+                MainActivity.this.startActivity(intent);
+                mFamAdd.toggle(true);
+            }
+        });
+
+        mFabAddGroup = (FloatingActionButton) findViewById(R.id.fabAddGroup);
+        mFabAddGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
+                MainActivity.this.startActivity(intent);
                 mFamAdd.toggle(true);
             }
         });

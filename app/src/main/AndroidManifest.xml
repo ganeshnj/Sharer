@@ -18,6 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddFriendActivity"
+            android:label="@string/title_activity_add_friend"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditFriendActivity"
+            android:label="@string/title_activity_edit_friend"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddGroupActivity"
+            android:label="@string/title_activity_add_group"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

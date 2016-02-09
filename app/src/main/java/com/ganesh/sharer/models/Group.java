@@ -3,6 +3,8 @@ package com.ganesh.sharer.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ganesh.sharer.DatabaseContext;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,18 @@ public class Group implements Parcelable {
     private String description;
 
     private ArrayList<Event> events;
-    private ArrayList<User> users;
+
+    private ArrayList<User> groupMembers;
+
+
+
+    public Group(String title, String description, ArrayList<User> users) {
+        this.groupID = nextId.incrementAndGet();
+        this.title = title;
+        this.description = description;
+        this.groupMembers = users;
+    }
+
 
     public Group(String title, String description) {
         this.groupID = nextId.incrementAndGet();
@@ -27,11 +40,8 @@ public class Group implements Parcelable {
         this.events = new ArrayList<>();
     }
 
-    public Group(String title, String description, ArrayList<Event> events) {
-        this.groupID = nextId.incrementAndGet();
-        this.title = title;
-        this.description = description;
-        this.events = events;
+    public void setGroupMembers(ArrayList<User> groupMembers) {
+        this.groupMembers = groupMembers;
     }
 
     public int getGroupID() {
@@ -96,4 +106,21 @@ public class Group implements Parcelable {
             return new Group[size];
         }
     };
+
+    public ArrayList<User> getGroupMembers(){
+        return groupMembers;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" GroupId:" + getGroupID());
+        builder.append(" Title:" + getTitle());
+        builder.append(" Description:" + getDescription());
+        builder.append(" Users:");
+        for (User user: getGroupMembers()) {
+            builder.append(" UserId:" + user.getUserId());
+        }
+        return builder.toString();
+    }
 }
