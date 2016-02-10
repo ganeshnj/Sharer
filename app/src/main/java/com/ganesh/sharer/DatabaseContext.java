@@ -5,6 +5,7 @@ import android.util.Log;
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.Settlement;
+import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
@@ -34,23 +35,30 @@ public class DatabaseContext {
         users.add(userWilbur);
 
         Group groupOurAppartment = new Group("Our Appartment", "Daily expenses of our appartment");
+        groupOurAppartment.getGroupMembers().add(userAda);
+        groupOurAppartment.getGroupMembers().add(userGeorge);
         // groupOurAppartment.getUsers().add(userAda);
         // groupOurAppartment.getUsers().add(userGeorge);
         // groupOurAppartment.getUsers().add(userHarry);
 
         groups.add(groupOurAppartment);
 
-        HashMap<User, Double> userFloatHashMap1 = new HashMap<>();
-        userFloatHashMap1.put(userAda, 70.0);
-        userFloatHashMap1.put(userGeorge, 90.0);
-        Event event1 = new Event("First event", "First event description", userFloatHashMap1);
+        Share share1 = new Share(userAda, 70.0);
+        Share share2 = new Share(userGeorge, 90.0);
+        ArrayList<Share> sharers = new ArrayList<>();
+        sharers.add(share1);
+        sharers.add(share2);
+        Event event1 = new Event("First event", "First event description", sharers);
         events.add(event1);
 
-        HashMap<User, Double> userFloatHashMap2 = new HashMap<>();
-        userFloatHashMap2.put(userHarry, 50.0);
-        userFloatHashMap2.put(userAda, 70.0);
-        userFloatHashMap2.put(userGeorge, 90.0);
-        Event event2 = new Event("Second event", "Second event description", userFloatHashMap2);
+        ArrayList<Share> sharers2 = new ArrayList<>();
+        Share share3 = new Share(userAda, 70.0);
+        Share share4 = new Share(userGeorge, 90.0);
+        Share share5 = new Share(userMarcel, 90.0);
+        sharers2.add(share3);
+        sharers2.add(share4);
+        sharers2.add(share5);
+        Event event2 = new Event("Second event", "Second event description", sharers2);
         events.add(event2);
 
     }
@@ -139,5 +147,23 @@ public class DatabaseContext {
         return true;
     }
 
+    public static boolean deleteGroup(int groupId){
+        for (Group group: getGroups()) {
+            if (group.getGroupID() == groupId){
+                getGroups().remove(group);
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public static Group getGroupById(int groupId){
+        for (Group group :
+                getGroups()) {
+            if (group.getGroupID() == groupId){
+                return group;
+            }
+
+        }  return null;
+    }
 }

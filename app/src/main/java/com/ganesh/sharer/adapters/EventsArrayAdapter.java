@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ganesh.sharer.R;
 import com.ganesh.sharer.models.Event;
+import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
 
 import java.text.SimpleDateFormat;
@@ -68,10 +69,10 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
         StringBuilder stringBuilder = new StringBuilder();
         double amount = 0;
 
-        for (Map.Entry<User, Double> entry: event.getSharedBy().entrySet()) {
-            stringBuilder.append(entry.getKey().getUsername());
+        for (Share share: event.getSharers()) {
+            stringBuilder.append(share.getSharer().getUsername());
             stringBuilder.append(", ");
-            amount += entry.getValue();
+            amount += share.getAmount();
         }
 
         holder.textViewSharedBy.setText(stringBuilder.toString());

@@ -1,17 +1,26 @@
-package com.ganesh.sharer;
+package com.ganesh.sharer.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ganesh.sharer.adapters.FriendsArrayAdapter;
+import com.ganesh.sharer.DatabaseContext;
+import com.ganesh.sharer.R;
+import com.ganesh.sharer.activities.EditFriendActivity;
+import com.ganesh.sharer.activities.EditGroupActivity;
 import com.ganesh.sharer.adapters.GroupsArrayAdapter;
 import com.ganesh.sharer.models.Group;
+import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
 
@@ -39,8 +48,8 @@ public class GroupsFragment extends Fragment {
 
     private ListView mListViewGroups;
     private GroupsArrayAdapter mAdapter;
+    private AdapterView.AdapterContextMenuInfo mContextMenuInfo;
 
-    private OnFragmentInteractionListener mListener;
 
     public GroupsFragment() {
         // Required empty public constructor
@@ -83,47 +92,42 @@ public class GroupsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mListViewGroups = (ListView) view.findViewById(R.id.listView_groups);
+        registerForContextMenu(mListViewGroups);
+
         mAdapter = new GroupsArrayAdapter(getActivity(), R.layout.row_layout_groups, mGroups);
         mListViewGroups.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.groups_context, menu);
+        mContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public boolean onContextItemSelected(MenuItem item) {
+        Group group = mGroups.get(mContextMenuInfo.position);
+
+        switch (item.getItemId()) {
+            case R.id.edit:
+                // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EditFriendFragment.newInstance(user.getUserId())).commitAllowingStateLoss();
+                Intent intent = new Intent(getActivity(), EditGroupActivity.class);
+                intent.putExtra(EditGroupActivity.ARG_GROUP_ID, group.getGroupID());
+                getActivity().startActivity(intent);
+                break;
+            case R.id.delete:
+                DatabaseContext context = new DatabaseContext();
+                if (context.deleteGroup(group.getGroupID())) {
+                    mGroups.remove(group);
+                    mAdapter.notifyDataSetChanged();
+                }
+
+                break;
         }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        return true;
     }
 }

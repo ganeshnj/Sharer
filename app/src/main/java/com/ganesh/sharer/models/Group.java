@@ -23,7 +23,10 @@ public class Group implements Parcelable {
 
     private ArrayList<User> groupMembers;
 
-
+    public Group(int id){
+        this.groupID = id;
+        this.groupMembers = new ArrayList<>();
+    }
 
     public Group(String title, String description, ArrayList<User> users) {
         this.groupID = nextId.incrementAndGet();
@@ -38,6 +41,7 @@ public class Group implements Parcelable {
         this.title = title;
         this.description = description;
         this.events = new ArrayList<>();
+        this.groupMembers = new ArrayList<>();
     }
 
     public void setGroupMembers(ArrayList<User> groupMembers) {

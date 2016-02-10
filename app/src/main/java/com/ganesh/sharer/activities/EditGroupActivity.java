@@ -1,4 +1,4 @@
-package com.ganesh.sharer;
+package com.ganesh.sharer.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,13 +11,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ganesh.sharer.DatabaseContext;
+import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
+import com.ganesh.sharer.dialogFragments.UsersSelectionDialogFragment;
+import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AddGroupActivity extends AppCompatActivity implements UserSelctionDialogFragment.OnFragmentInteractionListener {
+public class EditGroupActivity extends AppCompatActivity implements UsersSelectionDialogFragment.OnFragmentInteractionListener {
 
+    public static final String ARG_GROUP_ID= "group_id";
 
     public static final String ARG_USER_SELECTION_DIALOG= "user_selection_dialog";
 
@@ -26,13 +31,15 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
     private TextView mTextViewGroupMembers;
     private ArrayList<User> mGroupMembers;
     private DatabaseContext mDbContext;
+    private int mGroupId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_group);
+        setContentView(R.layout.activity_edit_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDbContext = new DatabaseContext();
 
@@ -42,13 +49,12 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
         mTextViewGroupMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserSelctionDialogFragment dialog = UserSelctionDialogFragment.newInstance(mDbContext.getUsers());
+                UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(mDbContext.getUsers(), mGroupMembers);
+                dialog.setFromActivity(EditGroupActivity.class.getSimpleName());
                 dialog.show(getSupportFragmentManager(), ARG_USER_SELECTION_DIALOG);
             }
         });
         mGroupMembers = new ArrayList<>();
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +64,20 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
                         .setAction("Action", null).show();
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mGroupId = extras.getInt(ARG_GROUP_ID);
+
+            Group group = Repository.getGroupById(mGroupId);
+            if (group != null){
+                this.mEditTextTitle.setText(group.getTitle());
+                this.mEditTextDescription.setText(group.getDescription());
+                this.mGroupMembers = group.getGroupMembers();
+
+                updateGroupMembers(group.getGroupMembers());
+            }
+        }
     }
 
     @Override
@@ -67,7 +87,7 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
                 finish();
                 return true;
             case R.id.save_group:
-                saveGroup(mEditTextTitle.getText().toString(), mEditTextDescription.getText().toString(), mGroupMembers);
+                saveGroup(mGroupId, mEditTextTitle.getText().toString(), mEditTextDescription.getText().toString(), mGroupMembers);
                 return true;
         }
 
@@ -80,20 +100,25 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
         return true;
     }
 
-    private boolean saveGroup(String title, String description, ArrayList<User> userIds) {
+    private boolean saveGroup(int groupId, String title, String description, ArrayList<User> groupMembers) {
         boolean isError = false;
         if (title == null || title.isEmpty()){
             mEditTextTitle.setError("Firstname is required");
             isError = true;
         }
 
-        if (userIds.size()==0){
+        if (groupMembers.size()==0){
             mTextViewGroupMembers.setError("There must be atleast one member in this group");
             isError = true;
         }
 
         if (isError == false) {
-            if (mDbContext.addGroup(title, description, mGroupMembers)) {
+            Group group = new Group(groupId);
+            group.setTitle(title);
+            group.setDescription(description);
+            group.setGroupMembers(groupMembers);
+
+            if (Repository.updateGroup(group)) {
                 finish();
             }
         }
@@ -102,15 +127,24 @@ public class AddGroupActivity extends AppCompatActivity implements UserSelctionD
     }
 
     @Override
-    public void onFinishingSelection(ArrayList<User> selectedUsers) {
+    public void onFinishingUsersSelection(ArrayList<User> selectedUsers) {
         mGroupMembers = selectedUsers;
+        updateGroupMembers(selectedUsers);
+    }
 
-        StringBuilder builder = new StringBuilder();
-        for (User user: selectedUsers) {
-            builder.append(user.getFormatted());
-            builder.append('\n');
+    public void updateGroupMembers(ArrayList<User> groupMembers){
+
+        if (groupMembers != null) {
+            StringBuilder builder = new StringBuilder();
+
+            for (User user: groupMembers) {
+                builder.append(user.getFormatted());
+                builder.append('\n');
+            }
+
+            mTextViewGroupMembers.setText(builder);
         }
 
-        mTextViewGroupMembers.setText(builder);
     }
+
 }

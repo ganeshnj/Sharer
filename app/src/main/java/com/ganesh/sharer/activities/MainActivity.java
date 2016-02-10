@@ -1,9 +1,8 @@
-package com.ganesh.sharer;
+package com.ganesh.sharer.activities;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,20 +13,26 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ganesh.sharer.DatabaseContext;
+import com.ganesh.sharer.fragments.EventsFragment;
+import com.ganesh.sharer.fragments.FriendsFragment;
+import com.ganesh.sharer.fragments.GroupsFragment;
+import com.ganesh.sharer.R;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FriendsFragment.OnFragmentInteractionListener,
-        EventsFragment.OnFragmentInteractionListener,
-        GroupsFragment.OnFragmentInteractionListener {
+        EventsFragment.OnFragmentInteractionListener
+        {
 
     private DatabaseContext mDatabaseContext = new DatabaseContext();
 
     private FloatingActionMenu mFamAdd;
     private FloatingActionButton mFabAddFriend;
     private FloatingActionButton mFabAddGroup;
+            private FloatingActionButton mFabAddEvent;
 
 
     @Override
@@ -54,6 +59,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, AddGroupActivity.class);
+                MainActivity.this.startActivity(intent);
+                mFamAdd.toggle(true);
+            }
+        });
+
+        mFabAddEvent = (FloatingActionButton) findViewById(R.id.fabAddEvent);
+        mFabAddEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddEventActivity.class);
                 MainActivity.this.startActivity(intent);
                 mFamAdd.toggle(true);
             }

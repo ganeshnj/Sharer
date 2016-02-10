@@ -1,4 +1,4 @@
-package com.ganesh.sharer;
+package com.ganesh.sharer.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.ganesh.sharer.R;
 import com.ganesh.sharer.adapters.EventsArrayAdapter;
 import com.ganesh.sharer.models.Event;
 

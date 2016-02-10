@@ -1,7 +1,5 @@
-package com.ganesh.sharer;
+package com.ganesh.sharer.dialogFragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.ganesh.sharer.adapters.FriendsArrayAdapter;
+import com.ganesh.sharer.R;
+import com.ganesh.sharer.activities.AddEventActivity;
+import com.ganesh.sharer.activities.AddGroupActivity;
+import com.ganesh.sharer.activities.EditGroupActivity;
 import com.ganesh.sharer.adapters.FriendsCheckArrayAdapter;
 import com.ganesh.sharer.models.User;
 
@@ -21,34 +22,38 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link UserSelctionDialogFragment.OnFragmentInteractionListener} interface
+ * {@link UsersSelectionDialogFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link UserSelctionDialogFragment#newInstance} factory method to
+ * Use the {@link UsersSelectionDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserSelctionDialogFragment extends DialogFragment {
+public class UsersSelectionDialogFragment extends DialogFragment {
     private static final String ARG_FRIENDS = "friends";
     private static final String ARG_AREADY_SELECTED = "already_selected";
 
     private ArrayList<User> mFriends;
+    private ArrayList<User> mAlreadySelected;
     private ListView mListViewFriends;
     private FriendsCheckArrayAdapter mAdapter;
     private Button mButtonOk;
+    private Button mButtonCancel;
 
-    public UserSelctionDialogFragment() {
+    private String mFromActivity;
+
+    public UsersSelectionDialogFragment() {
         // Required empty public constructor
     }
 
-    public static UserSelctionDialogFragment newInstance(ArrayList<User> friends) {
-        UserSelctionDialogFragment fragment = new UserSelctionDialogFragment();
+    public static UsersSelectionDialogFragment newInstance(ArrayList<User> friends) {
+        UsersSelectionDialogFragment fragment = new UsersSelectionDialogFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_FRIENDS, friends);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static UserSelctionDialogFragment newInstance(ArrayList<User> friends, ArrayList<User> alreadySelected) {
-        UserSelctionDialogFragment fragment = new UserSelctionDialogFragment();
+    public static UsersSelectionDialogFragment newInstance(ArrayList<User> friends, ArrayList<User> alreadySelected) {
+        UsersSelectionDialogFragment fragment = new UsersSelectionDialogFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(ARG_FRIENDS, friends);
         args.putParcelableArrayList(ARG_AREADY_SELECTED, alreadySelected);
@@ -61,11 +66,9 @@ public class UserSelctionDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new FriendsCheckArrayAdapter(getActivity(), R.layout.row_layout_friends, mFriends);
-
         if (getArguments() != null) {
             mFriends = getArguments().getParcelableArrayList(ARG_FRIENDS);
-            ArrayList<User> alreadySelected = getArguments().getParcelableArrayList(ARG_AREADY_SELECTED);
+            mAlreadySelected = getArguments().getParcelableArrayList(ARG_AREADY_SELECTED);
         }
     }
 
@@ -73,7 +76,7 @@ public class UserSelctionDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_selction_dialog, container, false);
+        return inflater.inflate(R.layout.fragment_users_selection_dialog, container, false);
     }
 
     @Override
@@ -84,16 +87,48 @@ public class UserSelctionDialogFragment extends DialogFragment {
         mButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddGroupActivity activity = (AddGroupActivity) getActivity();
-                activity.onFinishingSelection(mAdapter.getSelectedUsers());
-                UserSelctionDialogFragment.this.dismiss();
+
+                if (getFromActivity().equals(AddGroupActivity.class.getSimpleName())){
+                    AddGroupActivity activity = (AddGroupActivity) getActivity();
+                    activity.onFinishingUsersSelection(mAdapter.getSelectedUsers());
+                }
+                else if (getFromActivity().equals(EditGroupActivity.class.getSimpleName())) {
+                    EditGroupActivity activity = (EditGroupActivity) getActivity();
+                    activity.onFinishingUsersSelection(mAdapter.getSelectedUsers());
+                }
+                else if (getFromActivity().equals(AddEventActivity.class.getSimpleName())) {
+                    AddEventActivity activity = (AddEventActivity) getActivity();
+                    activity.onFinishingUsersSelection(mAdapter.getSelectedUsers());
+                }
+                UsersSelectionDialogFragment.this.dismiss();
+            }
+        });
+
+        mButtonCancel = (Button) view.findViewById(R.id.buttonCancel);
+        mButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UsersSelectionDialogFragment.this.dismiss();
             }
         });
 
         mListViewFriends = (ListView) view.findViewById(R.id.listView_friends);
+        mAdapter = new FriendsCheckArrayAdapter(getActivity(), R.layout.row_layout_friends, mFriends);
+
+        if (mAlreadySelected != null){
+            mAdapter.setBoolSelectedUsers(mAlreadySelected);
+        }
 
         mListViewFriends.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+    }
+
+    public String getFromActivity() {
+        return mFromActivity;
+    }
+
+    public void setFromActivity(String fromActivity) {
+        this.mFromActivity = fromActivity;
     }
 
     /**
@@ -108,6 +143,6 @@ public class UserSelctionDialogFragment extends DialogFragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFinishingSelection(ArrayList<User> selectedUsers);
+        void onFinishingUsersSelection(ArrayList<User> selectedUsers);
     }
 }

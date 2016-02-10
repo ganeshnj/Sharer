@@ -1,19 +1,19 @@
 package com.ganesh.sharer.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ganesh.sharer.R;
 import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +22,7 @@ import java.util.List;
 public class FriendsCheckArrayAdapter extends ArrayAdapter<User> {
     private Activity context;
     private List<User> users;
-    private List<Boolean> isSelecteds;
+    private List<Boolean> boolSelectedUsers;
 
     static class ViewHolder {
         public TextView textViewName;
@@ -34,10 +34,8 @@ public class FriendsCheckArrayAdapter extends ArrayAdapter<User> {
         super(context, resource, objects);
         this.context = context;
         this.users = objects;
-        this.isSelecteds = new ArrayList<>();
-        for (User user: users) {
-            this.isSelecteds.add(false);
-        }
+        this.boolSelectedUsers = new ArrayList<Boolean>(Arrays.asList(new Boolean[objects.size()]));
+        Collections.fill(boolSelectedUsers, false);
     }
 
     @Override
@@ -55,7 +53,7 @@ public class FriendsCheckArrayAdapter extends ArrayAdapter<User> {
             viewHolder.checkBoxIsSelected.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    isSelecteds.set(position, viewHolder.checkBoxIsSelected.isChecked());
+                    boolSelectedUsers.set(position, viewHolder.checkBoxIsSelected.isChecked());
                 }
             });
             rowView.setTag(viewHolder);
@@ -65,11 +63,11 @@ public class FriendsCheckArrayAdapter extends ArrayAdapter<User> {
         User user = users.get(position);
         holder.textViewName.setText(user.getFirstname() + " " + user.getLastname());
         holder.textViewEmail.setText(user.getEmail());
-        holder.checkBoxIsSelected.setChecked(isSelecteds.get(position));
+        holder.checkBoxIsSelected.setChecked(boolSelectedUsers.get(position));
         holder.checkBoxIsSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSelecteds.set(position, holder.checkBoxIsSelected.isChecked());
+                boolSelectedUsers.set(position, holder.checkBoxIsSelected.isChecked());
             }
         });
 
@@ -80,11 +78,25 @@ public class FriendsCheckArrayAdapter extends ArrayAdapter<User> {
         ArrayList<User> selectedUsers = new ArrayList<>();
         int i = 0;
         for (User user : users) {
-            if (isSelecteds.get(i)){
+            if (boolSelectedUsers.get(i)){
                 selectedUsers.add(user);
             }
             i++;
         }
         return selectedUsers;
+    }
+
+    public List<Boolean> getBoolSelectedUsers() {
+        return boolSelectedUsers;
+    }
+
+    public void setBoolSelectedUsers(List<User> selectedUsers) {
+
+        for(int i=0; i<users.size(); i++){
+            if (selectedUsers.contains(users.get(i))) {
+                boolSelectedUsers.set(i, true);
+            }
+
+        }
     }
 }
