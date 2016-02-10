@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.models.Settlement;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class SettlementArrayAdapter extends ArrayAdapter<Settlement>{
     private Activity context;
     private List<Settlement> settlements;
+    private String currecySign = Repository.getCurrency().getSymbol();
 
     static class ViewHolder {
         public TextView textViewName;
@@ -47,7 +49,7 @@ public class SettlementArrayAdapter extends ArrayAdapter<Settlement>{
         ViewHolder holder = (ViewHolder) rowView.getTag();
         Settlement settlement = settlements.get(position);
         holder.textViewName.setText(settlement.getTaker().getName());
-        holder.textViewAmount.setText(String.valueOf(settlement.getAmount()));
+        holder.textViewAmount.setText(currecySign+String.valueOf(settlement.getAmount()));
 
         return rowView;
     }

@@ -11,8 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class ShareArrayAdapter extends ArrayAdapter<Share> {
     static class ViewHolder {
         public TextView textViewName;
         public TextView editTextAmount;
+        public TextView textViewCurrency;
     }
 
     public ShareArrayAdapter(Activity context, int resource, List<Share> objects) {
@@ -43,6 +47,7 @@ public class ShareArrayAdapter extends ArrayAdapter<Share> {
             rowView = inflater.inflate(R.layout.row_layout_share, null);
 
             ViewHolder viewHolder = new ViewHolder();
+            viewHolder.textViewCurrency = (TextView) rowView.findViewById(R.id.textviewCurrencySign);
             viewHolder.textViewName = (TextView) rowView.findViewById(R.id.textview_name);
             viewHolder.editTextAmount = (TextView) rowView.findViewById(R.id.editTextAmount);
             viewHolder.editTextAmount.addTextChangedListener(new TextWatcher() {
@@ -67,7 +72,13 @@ public class ShareArrayAdapter extends ArrayAdapter<Share> {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
         Share share = shares.get(position);
-        holder.textViewName.setText(share.getSharer().getFirstname() + " " + share.getSharer().getLastname());
+        if (share.getSharer() == Repository.getLoginedUser()){
+            holder.textViewName.setText("You");
+        }
+        else {
+            holder.textViewName.setText(share.getSharer().getName());
+        }
+
         holder.editTextAmount.setText(String.valueOf(share.getAmount()));
 
         return rowView;

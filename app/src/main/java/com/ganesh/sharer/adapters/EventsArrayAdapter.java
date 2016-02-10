@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
@@ -74,9 +75,10 @@ public class EventsArrayAdapter extends ArrayAdapter<Event> {
             stringBuilder.append(", ");
             amount += share.getAmount();
         }
+        stringBuilder.deleteCharAt(stringBuilder.length()-2);
 
         holder.textViewSharedBy.setText(stringBuilder.toString());
-        holder.textViewAmount.setText(String.valueOf(amount));
+        holder.textViewAmount.setText(Repository.getCurrency().getSymbol() +  String.valueOf(amount));
 
 
         return rowView;

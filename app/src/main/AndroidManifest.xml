@@ -41,6 +41,18 @@
         <activity
             android:name=".activities.AddSettlementActivity"
             android:label="@string/title_activity_add_settlement"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.DetailEventActivity"
+            android:label="@string/title_activity_detail_event"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EditEventActivity"
+            android:label="@string/title_activity_edit_event"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

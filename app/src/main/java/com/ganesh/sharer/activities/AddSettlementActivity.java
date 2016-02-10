@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
@@ -35,6 +36,8 @@ public class AddSettlementActivity extends AppCompatActivity implements UserSele
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        setTitle("Add settlement");
+
         mEditTextAmount = (EditText) findViewById(R.id.editTextAmount);
         mEditTextFriend = (EditText) findViewById(R.id.editTextFriend);
         mSettlement = new Settlement();
@@ -48,14 +51,8 @@ public class AddSettlementActivity extends AppCompatActivity implements UserSele
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        TextView textViewCurrencySign = (TextView) findViewById(R.id.textviewCurrencySign);
+        textViewCurrencySign.setText(Repository.getCurrency().getSymbol());
     }
 
     @Override

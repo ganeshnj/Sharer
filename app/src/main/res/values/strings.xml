@@ -14,4 +14,7 @@
     <string name="title_activity_edit_group">EditGroupActivity</string>
     <string name="title_activity_add_event">AddEventActivity</string>
     <string name="title_activity_add_settlement">AddSettlementActivity</string>
+    <string name="title_activity_detail_event">DetailEventActivity</string>
+    <string name="title_activity_edit_event">EditEventActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>

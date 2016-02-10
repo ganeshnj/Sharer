@@ -38,15 +38,6 @@ public class EditFriendActivity extends AppCompatActivity {
         this.mEditTextLastname = (EditText) findViewById(R.id.editTextLastname);
         this.mEditTextEmail = (EditText) findViewById(R.id.editTextEmail);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mUserId = extras.getInt(ARG_USER_ID);

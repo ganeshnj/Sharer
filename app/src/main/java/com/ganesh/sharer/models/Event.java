@@ -3,6 +3,7 @@ package com.ganesh.sharer.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -109,6 +110,36 @@ public class Event implements Parcelable {
 
     public void setSharers(ArrayList<Share> sharers) {
         this.sharers = sharers;
+    }
+
+    public double getSharedAmount() {
+        double amount = 0;
+        for (Share share: getSharers()) {
+            amount += share.getAmount();
+        }
+        return  amount;
+    }
+
+    public HashMap<User, Double> getResults(){
+        HashMap<User, Double> map = new HashMap<>();
+        double avg = getTotalAmount()/getSharers().size();
+        double[] difference = new double[getSharers().size()];
+        int positive =0, negative =0, neutral=0;
+        for (int i = 0; i < getSharers().size(); i++) {
+            difference[i] = getSharers().get(i).getAmount() - avg;
+
+            if (difference[i]>0)
+                positive++;
+            else if (difference[i]<0)
+                negative++;
+            else
+                neutral++;
+        }
+        
+
+
+
+        return map;
     }
 
     @Override

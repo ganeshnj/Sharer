@@ -9,18 +9,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textview_amount"
-        android:text="24$"
+        android:text="$24"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_horizontal_margin"
-        style="@style/Base.TextAppearance.AppCompat.Large"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_gravity="center_vertical"
         android:paddingBottom="@dimen/activity_horizontal_margin" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
@@ -40,7 +41,7 @@
             android:text="Event title"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            style="@style/Base.TextAppearance.AppCompat.Large"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
             />
 
         <TextView
@@ -50,7 +51,7 @@
             android:text="Event description"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            style="@style/Base.TextAppearance.AppCompat.Medium"
+            style="@style/Base.TextAppearance.AppCompat.Small"
             />
 
         <TextView

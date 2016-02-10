@@ -2,6 +2,7 @@ package com.ganesh.sharer;
 
 import android.util.Log;
 
+import com.ganesh.sharer.models.Currency;
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.Settlement;
@@ -22,6 +23,7 @@ public class DatabaseContext {
     private static ArrayList<Event> events = new ArrayList<>();
     private static ArrayList<Group> groups = new ArrayList<>();
     private static ArrayList<Settlement> settlements = new ArrayList<>();
+    private static Currency currency;
 
     static {
 
@@ -49,26 +51,34 @@ public class DatabaseContext {
 
         Share share1 = new Share(userAda, 70.0);
         Share share2 = new Share(userGeorge, 90.0);
+        Share share3 = new Share(userWilbur, 0);
         ArrayList<Share> sharers = new ArrayList<>();
         sharers.add(share1);
         sharers.add(share2);
+        sharers.add(share3);
         Event event1 = new Event("First event", "First event description", sharers);
+        event1.setTotalAmount(160);
         events.add(event1);
 
         ArrayList<Share> sharers2 = new ArrayList<>();
-        Share share3 = new Share(userAda, 70.0);
-        Share share4 = new Share(userGeorge, 90.0);
-        Share share5 = new Share(userMarcel, 90.0);
-        sharers2.add(share3);
+        Share share4 = new Share(userAda, 70.0);
+        Share share5 = new Share(userGeorge, 90.0);
+        Share share6 = new Share(userMarcel, 90.0);
+        Share share7 = new Share(userWilbur, 0);
         sharers2.add(share4);
         sharers2.add(share5);
+        sharers2.add(share6);
+        sharers2.add(share7);
         Event event2 = new Event("Second event", "Second event description", sharers2);
+        event2.setTotalAmount(250);
         events.add(event2);
 
         Settlement s1 = new Settlement(getMe(), userAda, 10.0);
         Settlement s2 = new Settlement(getMe(), userGeorge, 20.0);
         settlements.add(s1);
         settlements.add(s2);
+
+        currency = new Currency("$", "Dollar");
 
     }
 
@@ -182,5 +192,13 @@ public class DatabaseContext {
             }
 
         }  return null;
+    }
+
+    public static Currency getCurrency() {
+        return currency;
+    }
+
+    public static void setCurrency(Currency currency) {
+        DatabaseContext.currency = currency;
     }
 }

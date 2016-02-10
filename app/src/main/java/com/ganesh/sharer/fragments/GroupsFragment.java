@@ -97,6 +97,15 @@ public class GroupsFragment extends Fragment {
 
         mAdapter = new GroupsArrayAdapter(getActivity(), R.layout.row_layout_groups, mGroups);
         mListViewGroups.setAdapter(mAdapter);
+        mListViewGroups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Group group = mGroups.get(position);
+
+                getActivity().getSupportFragmentManager().beginTransaction().
+                        replace(R.id.content_frame, EventsFragment.newInstance(group.getEvents(), group.getTitle())).commitAllowingStateLoss();
+            }
+        });
         mAdapter.notifyDataSetChanged();
 
         getActivity().setTitle("Groups");
@@ -123,7 +132,6 @@ public class GroupsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.edit:
-                // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EditFriendFragment.newInstance(user.getUserId())).commitAllowingStateLoss();
                 Intent intent = new Intent(getActivity(), EditGroupActivity.class);
                 intent.putExtra(EditGroupActivity.ARG_GROUP_ID, group.getGroupID());
                 getActivity().startActivity(intent);

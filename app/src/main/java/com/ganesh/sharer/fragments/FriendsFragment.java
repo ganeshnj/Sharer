@@ -107,7 +107,6 @@ public class FriendsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.edit:
-                // getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EditFriendFragment.newInstance(user.getUserId())).commitAllowingStateLoss();
                 Intent intent = new Intent(getActivity(), EditFriendActivity.class);
                 intent.putExtra(EditFriendActivity.ARG_USER_ID, user.getUserId());
                 getActivity().startActivity(intent);

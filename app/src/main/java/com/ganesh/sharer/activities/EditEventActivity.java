@@ -1,5 +1,6 @@
 package com.ganesh.sharer.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
 import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.adapters.ShareArrayAdapter;
@@ -25,16 +24,15 @@ import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class AddEventActivity extends AppCompatActivity implements GroupSelectionDialogFragment.OnFragmentInteractionListener,
-        UsersSelectionDialogFragment.OnFragmentInteractionListener{
-    public static final String ARG_GROUP_SELECTION_DIALOG= "group_selection_dialog";
+public class EditEventActivity extends AppCompatActivity implements GroupSelectionDialogFragment.OnFragmentInteractionListener,
+        UsersSelectionDialogFragment.OnFragmentInteractionListener {
 
+    public static final String ARG_EVENT_ID= "event_id";
+    public static final String ARG_GROUP_SELECTION_DIALOG= "group_selection_dialog";
     public static final String ARG_USERS_SELECTION_DIALOG = "users_selection_dialog";
-    
+
     private Event mEvent;
     private EditText mEditTextGroup;
     private EditText mEditTextEventName;
@@ -46,22 +44,39 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
     private ListView mListViewShares;
     private ShareArrayAdapter mShareArrayAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_edit_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Add a event");
+
+        setTitle("Edit event");
 
         mEditTextEventName = (EditText) findViewById(R.id.editEventName);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
         mEditTextAmount = (EditText) findViewById(R.id.editTextAmount);
 
-        mEvent = new Event();
-        mShares = new ArrayList<>();
-        mShares.add(new Share(Repository.getLoginedUser(), 0));
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int eventId = extras.getInt(ARG_EVENT_ID);
+            mEvent = Repository.getEventById(eventId);
+        }
+
+        if (mEvent != null){
+            mShares = mEvent.getSharers();
+
+            mEditTextAmount.setText(String.valueOf(mEvent.getTotalAmount()));
+            mEditTextEventName.setText(mEvent.getTitle());
+            mEditTextDescription.setText(mEvent.getDescription());
+        }
+        else {
+            mEvent = new Event();
+            mShares = new ArrayList<>();
+            mShares.add(new Share(Repository.getLoginedUser(), 0));
+        }
 
         mEditTextGroup = (EditText) findViewById(R.id.editTextGroup);
         mEditTextGroup.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +104,9 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
 
                 ArrayList<User> selectedFriends = new ArrayList<User>();
 
-                    for (Share share: mShares ) {
-                        selectedFriends.add(share.getSharer());
-                    }
+                for (Share share: mShares ) {
+                    selectedFriends.add(share.getSharer());
+                }
 
 
                 UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(friends, selectedFriends);
@@ -105,9 +120,14 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         mListViewShares.setAdapter(mShareArrayAdapter);
         mShareArrayAdapter.notifyDataSetChanged();
 
-        TextView textViewCurrencySign = (TextView) findViewById(R.id.textviewCurrencySign);
-        textViewCurrencySign.setText(Repository.getCurrency().getSymbol());
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_event, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -131,7 +151,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
 
         boolean isError = false;
         if (title == null || title.isEmpty()){
-            mEditTextEventName.setError("Event name is required");
+            mEditTextEventName.setError("Eventname is required");
             isError = true;
         }
 
@@ -150,7 +170,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
 
             if (a != mEvent.getSharedAmount())
             {
-                AlertDialog.Builder alert = new AlertDialog.Builder(AddEventActivity.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(EditEventActivity.this);
                 alert.setTitle("Amount mismatch");
                 alert.setMessage("Total amount and shared amount should be equal!");
                 alert.setPositiveButton("OK",null);
@@ -158,28 +178,16 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
                 return false;
             }
 
-            Repository.createEvent(mEvent);
+            Repository.updateEvent(mEvent);
         }
 
         return !isError;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.add_event, menu);
-        return true;
-    }
-
-    @Override
     public void onFinishingGroupSelection(Group selectedGroup) {
         mEvent.setGroup(selectedGroup);
         mEditTextGroup.setText(selectedGroup.getTitle());
-
-        mShares = new ArrayList<>();
-        mShares.add(new Share(Repository.getLoginedUser(), 0));
-        mShareArrayAdapter = new ShareArrayAdapter(this, R.layout.row_layout_share, mShares);
-        mListViewShares.setAdapter(mShareArrayAdapter);
-        mShareArrayAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -208,4 +216,5 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         mListViewShares.setAdapter(mShareArrayAdapter);
         mShareArrayAdapter.notifyDataSetChanged();
     }
+
 }

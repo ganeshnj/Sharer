@@ -1,7 +1,6 @@
 package com.ganesh.sharer.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.fragments.EventsFragment;
 import com.ganesh.sharer.fragments.FriendsFragment;
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     private FloatingActionButton mFabAddGroup;
             private FloatingActionButton mFabAddEvent;
             private FloatingActionButton mFadAddSettlement;
+
 
 
     @Override
@@ -94,6 +94,9 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        updateLoginInfo();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, EventsFragment.newInstance(Repository.getAllEvents())).commitAllowingStateLoss();
     }
 
@@ -121,11 +124,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -146,9 +144,23 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_settlements) {
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, SettlementFragment.newInstance(Repository.getAllSettlements())).commitAllowingStateLoss();
         }
+        else if (id == R.id.nav_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            this.startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void updateLoginInfo() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        TextView mTextViewLoginedEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.textViewLoginedUserEmail);
+        mTextViewLoginedEmail.setText(Repository.getLoginedUser().getEmail());
+
+        TextView mTextViewLoginedName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.textViewLoginedUserName);
+        mTextViewLoginedName.setText(Repository.getLoginedUser().getName());
     }
 }

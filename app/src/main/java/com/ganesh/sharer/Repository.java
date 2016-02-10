@@ -1,5 +1,6 @@
 package com.ganesh.sharer;
 
+import com.ganesh.sharer.models.Currency;
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.Settlement;
@@ -35,7 +36,9 @@ public class Repository {
     public  static boolean updateUser(User user) {
         User u = getUserById(user.getUserId());
         if (u != null){
-            u = user;
+            u.setFirstname(user.getFirstname());
+            u.setLastname(user.getLastname());
+            u.setEmail(user.getEmail());
             return true;
         }
         return false;
@@ -70,7 +73,9 @@ public class Repository {
     public static boolean updateGroup(Group group) {
         Group g = getGroupById(group.getGroupID());
         if (g != null){
-            g = group;
+            g.setTitle(group.getTitle());
+            g.setDescription(group.getDescription());
+            g.setGroupMembers(group.getGroupMembers());
             return true;
         }
         return false;
@@ -105,7 +110,11 @@ public class Repository {
     public static boolean updateEvent(Event event) {
         Event e = getEventById(event.getEventID());
         if (e != null){
-            e = event;
+            e.setTitle(event.getTitle());
+            e.setDescription(event.getDescription());
+            e.setSharers(event.getSharers());
+            e.setGroup(event.getGroup());
+            e.setTotalAmount(event.getTotalAmount());
             return true;
         }
         return false;
@@ -114,6 +123,15 @@ public class Repository {
     public static boolean deleteEvent(Event event) {
         if (context.getEvents().contains(event)){
             context.getEvents().remove(event);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean deleteEventById(int eventId) {
+        Event e = getEventById(eventId);
+        if (e != null) {
+            context.getEvents().remove(e);
             return true;
         }
         return false;
@@ -140,7 +158,9 @@ public class Repository {
     public static boolean updateSettlement(Settlement settlement) {
         Settlement s = getSettlementById(settlement.getSettlementID());
         if (s != null){
-            s = settlement;
+            s.setTaker(settlement.getTaker());
+            s.setGiver(settlement.getGiver());
+            s.setAmount(settlement.getAmount());
             return true;
         }
         return false;
@@ -161,6 +181,25 @@ public class Repository {
 
     public static User getLoginedUser(){
         return context.getMe();
+    }
+
+    public static boolean updateLoginedUser(User user) {
+        User u = getLoginedUser();
+        u.setFirstname(user.getFirstname());
+        u.setLastname(user.getLastname());
+        u.setEmail(user.getEmail());
+        return true;
+    }
+
+    public static Currency getCurrency() {
+        return context.getCurrency();
+    }
+
+    public static boolean updateCurrency(Currency c) {
+        Currency currency = getCurrency();
+        currency.setDesc(c.getDesc());
+        currency.setSymbol(c.getSymbol());
+        return true;
     }
 
 

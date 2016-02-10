@@ -32,17 +32,6 @@ public class AddFriendActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Add a friend");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-
         this.mEditTextFirstname = (EditText) findViewById(R.id.editTextFirstname);
         this.mEditTextLastname = (EditText) findViewById(R.id.editTextLastname);
         this.mEditTextEmail = (EditText) findViewById(R.id.editTextEmail);
