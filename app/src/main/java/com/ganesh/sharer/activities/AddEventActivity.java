@@ -133,7 +133,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         boolean isError = false;
         if (title == null || title.isEmpty()){
             mEditTextEventName.setError("Firstname is required");
-            isError = true;
+            isError = true; 
         }
 
 
