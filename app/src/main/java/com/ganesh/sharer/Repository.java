@@ -2,6 +2,7 @@ package com.ganesh.sharer;
 
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Group;
+import com.ganesh.sharer.models.Settlement;
 import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class Repository {
         context = new DatabaseContext();
     }
 
-    public boolean createUser(User user) {
+    public static boolean createUser(User user) {
         context.getUsers().add(user);
         return true;
     }
@@ -117,5 +118,50 @@ public class Repository {
         }
         return false;
     }
-    
+
+    public static ArrayList<Event> getAllEvents() {
+        return context.getEvents();
+    }
+
+    public static boolean createSettlement(Settlement settlement) {
+        context.getSettlements().add(settlement);
+        return true;
+    }
+
+    public static Settlement getSettlementById(int settlementId) {
+        for (Settlement settlement: context.getSettlements()) {
+            if (settlement.getSettlementID() == settlementId){
+                return settlement;
+            }
+        }
+        return null;
+    }
+
+    public static boolean updateSettlement(Settlement settlement) {
+        Settlement s = getSettlementById(settlement.getSettlementID());
+        if (s != null){
+            s = settlement;
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean deleteSettlement(Settlement settlement) {
+        if (context.getSettlements().contains(settlement)){
+            context.getSettlements().remove(settlement);
+            return true;
+        }
+        return false;
+    }
+
+
+    public static ArrayList<Settlement> getAllSettlements() {
+        return context.getSettlements();
+    }
+
+    public static User getLoginedUser(){
+        return context.getMe();
+    }
+
+
 }

@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.dialogFragments.UsersSelectionDialogFragment;
+import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.User;
 
 import java.util.ArrayList;
@@ -27,7 +29,6 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
     private EditText mEditTextDescription;
     private TextView mTextViewGroupMembers;
     private ArrayList<User> mGroupMembers;
-    private DatabaseContext mDbContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mDbContext = new DatabaseContext();
+        setTitle("Add a group");
 
         mEditTextTitle = (EditText) findViewById(R.id.editTextTitle);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
@@ -44,7 +45,7 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
         mTextViewGroupMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(mDbContext.getUsers(), mGroupMembers);
+                UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(Repository.getAllUsers(), mGroupMembers);
                 dialog.setFromActivity(AddGroupActivity.class.getSimpleName());
                 dialog.show(getSupportFragmentManager(), ARG_USER_SELECTION_DIALOG);
             }
@@ -96,7 +97,8 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
         }
 
         if (isError == false) {
-            if (mDbContext.addGroup(title, description, mGroupMembers)) {
+            Group group = new Group(title, description, mGroupMembers);
+            if (Repository.createGroup(group)) {
                 finish();
             }
         }

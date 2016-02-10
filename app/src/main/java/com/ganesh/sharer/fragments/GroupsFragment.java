@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.activities.EditFriendActivity;
 import com.ganesh.sharer.activities.EditGroupActivity;
 import com.ganesh.sharer.adapters.GroupsArrayAdapter;
@@ -97,6 +98,14 @@ public class GroupsFragment extends Fragment {
         mAdapter = new GroupsArrayAdapter(getActivity(), R.layout.row_layout_groups, mGroups);
         mListViewGroups.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+
+        getActivity().setTitle("Groups");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -120,8 +129,7 @@ public class GroupsFragment extends Fragment {
                 getActivity().startActivity(intent);
                 break;
             case R.id.delete:
-                DatabaseContext context = new DatabaseContext();
-                if (context.deleteGroup(group.getGroupID())) {
+                if (Repository.deleteGroup(group)) {
                     mGroups.remove(group);
                     mAdapter.notifyDataSetChanged();
                 }

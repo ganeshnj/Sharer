@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.models.User;
 
 public class EditFriendActivity extends AppCompatActivity {
@@ -23,7 +24,6 @@ public class EditFriendActivity extends AppCompatActivity {
     private EditText mEditTextFirstname;
     private EditText mEditTextLastname;
     private EditText mEditTextEmail;
-    private DatabaseContext mDbContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,7 @@ public class EditFriendActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mDbContext = new DatabaseContext();
+        setTitle("Edit a friend");
 
         this.mEditTextFirstname = (EditText) findViewById(R.id.editTextFirstname);
         this.mEditTextLastname = (EditText) findViewById(R.id.editTextLastname);
@@ -52,7 +51,7 @@ public class EditFriendActivity extends AppCompatActivity {
         if (extras != null) {
             mUserId = extras.getInt(ARG_USER_ID);
 
-            User user = mDbContext.getUser(mUserId);
+            User user = Repository.getUserById(mUserId);
             if (user != null){
                 this.mEditTextFirstname.setText(user.getFirstname());
                 this.mEditTextLastname.setText(user.getLastname());
@@ -69,7 +68,6 @@ public class EditFriendActivity extends AppCompatActivity {
                 return true;
             case R.id.save_friend:
                 if (saveFriend(mUserId, mEditTextFirstname.getText().toString(), mEditTextLastname.getText().toString(), mEditTextEmail.getText().toString())){
-                    DatabaseContext context = new DatabaseContext();
                     finish();
                 }
                 return true;
@@ -104,8 +102,7 @@ public class EditFriendActivity extends AppCompatActivity {
 
         if (!isError){
             User user = new User(userId, firstname, lastname, email);
-            DatabaseContext context = new DatabaseContext();
-            context.editUser(user);
+            Repository.updateUser(user);
         }
 
         return !isError;

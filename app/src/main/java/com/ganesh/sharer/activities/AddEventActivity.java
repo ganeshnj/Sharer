@@ -29,7 +29,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         UsersSelectionDialogFragment.OnFragmentInteractionListener{
     public static final String ARG_GROUP_SELECTION_DIALOG= "group_selection_dialog";
 
-    public static final String ARG_USER_SELECTION_DIALOG= "user_selection_dialog";
+    public static final String ARG_USERS_SELECTION_DIALOG = "users_selection_dialog";
     
     private Event mEvent;
     private EditText mEditTextGroup;
@@ -49,6 +49,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Add a event");
 
         mEditTextEventName = (EditText) findViewById(R.id.editEventName);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
@@ -100,7 +101,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
 
                 UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(friends, selectedFriends);
                 dialog.setFromActivity(AddEventActivity.class.getSimpleName());
-                dialog.show(getSupportFragmentManager(), ARG_USER_SELECTION_DIALOG);
+                dialog.show(getSupportFragmentManager(), ARG_USERS_SELECTION_DIALOG);
             }
         });
 
@@ -120,7 +121,6 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
                 if (saveEvent(mEditTextEventName.getText().toString(),
                         mEditTextDescription.getText().toString(),
                         mEditTextAmount.getText().toString())){
-                    DatabaseContext context = new DatabaseContext();
                     finish();
                 }
                 return true;
@@ -133,7 +133,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         boolean isError = false;
         if (title == null || title.isEmpty()){
             mEditTextEventName.setError("Firstname is required");
-            isError = true; 
+            isError = true;
         }
 
 

@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.activities.EditFriendActivity;
 import com.ganesh.sharer.adapters.FriendsArrayAdapter;
 import com.ganesh.sharer.models.User;
@@ -39,8 +40,6 @@ public class FriendsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private ArrayList<User> mUsers;
 
-    private OnFragmentInteractionListener mListener;
-
     private ListView mListViewFriends;
     private FriendsArrayAdapter mAdapter;
     private AdapterView.AdapterContextMenuInfo mContextMenuInfo;
@@ -49,14 +48,6 @@ public class FriendsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param users Parameter 1.
-     * @return A new instance of fragment FriendsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FriendsFragment newInstance(ArrayList<User> users) {
         FriendsFragment fragment = new FriendsFragment();
         Bundle args = new Bundle();
@@ -90,31 +81,16 @@ public class FriendsFragment extends Fragment {
         mAdapter = new FriendsArrayAdapter(getActivity(), R.layout.row_layout_friends, mUsers);
         mListViewFriends.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        getActivity().setTitle("Friends");
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -137,8 +113,7 @@ public class FriendsFragment extends Fragment {
                 getActivity().startActivity(intent);
                 break;
             case R.id.delete:
-                DatabaseContext context = new DatabaseContext();
-                if (context.deleteUser(user)) {
+                if (Repository.deleteUser(user)) {
                     mUsers.remove(user);
                     mAdapter.notifyDataSetChanged();
                 }
@@ -148,18 +123,4 @@ public class FriendsFragment extends Fragment {
         return true;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

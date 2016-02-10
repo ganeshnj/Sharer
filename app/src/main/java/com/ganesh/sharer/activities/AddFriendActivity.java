@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.ganesh.sharer.DatabaseContext;
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.models.User;
 
 public class AddFriendActivity extends AppCompatActivity {
@@ -24,12 +25,12 @@ public class AddFriendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_add_friend);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Add a friend");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,7 +41,7 @@ public class AddFriendActivity extends AppCompatActivity {
             }
         });
 
-        setTitle("Add a friend");
+
 
         this.mEditTextFirstname = (EditText) findViewById(R.id.editTextFirstname);
         this.mEditTextLastname = (EditText) findViewById(R.id.editTextLastname);
@@ -55,7 +56,6 @@ public class AddFriendActivity extends AppCompatActivity {
                 return true;
             case R.id.save_friend:
                 if (saveFriend(mEditTextFirstname.getText().toString(), mEditTextLastname.getText().toString(), mEditTextEmail.getText().toString())){
-                    DatabaseContext context = new DatabaseContext();
                     finish();
                 }
                 return true;
@@ -89,8 +89,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
         if (!isError){
             User user = new User(firstname, lastname, email);
-            DatabaseContext context = new DatabaseContext();
-            context.addUser(user);
+            return Repository.createUser(user);
         }
 
         return !isError;

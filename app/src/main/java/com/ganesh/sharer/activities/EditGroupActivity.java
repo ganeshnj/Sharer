@@ -30,7 +30,6 @@ public class EditGroupActivity extends AppCompatActivity implements UsersSelecti
     private EditText mEditTextDescription;
     private TextView mTextViewGroupMembers;
     private ArrayList<User> mGroupMembers;
-    private DatabaseContext mDbContext;
     private int mGroupId;
 
     @Override
@@ -41,7 +40,8 @@ public class EditGroupActivity extends AppCompatActivity implements UsersSelecti
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mDbContext = new DatabaseContext();
+        setTitle("Edit a group");
+
 
         mEditTextTitle = (EditText) findViewById(R.id.editTextTitle);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
@@ -49,7 +49,7 @@ public class EditGroupActivity extends AppCompatActivity implements UsersSelecti
         mTextViewGroupMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(mDbContext.getUsers(), mGroupMembers);
+                UsersSelectionDialogFragment dialog = UsersSelectionDialogFragment.newInstance(Repository.getAllUsers(), mGroupMembers);
                 dialog.setFromActivity(EditGroupActivity.class.getSimpleName());
                 dialog.show(getSupportFragmentManager(), ARG_USER_SELECTION_DIALOG);
             }

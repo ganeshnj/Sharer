@@ -53,6 +53,10 @@ public class User implements Parcelable {
         this.username = username;
     }
 
+    public String getName() {
+        return firstname + " " + lastname;
+    }
+
     public String getPassword() {
         return password;
     }

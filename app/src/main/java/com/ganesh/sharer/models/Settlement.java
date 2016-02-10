@@ -13,9 +13,13 @@ public class Settlement implements Parcelable {
     private int settlementID;
     private User giver;
     private User taker;
-    private float amount;
+    private double amount;
 
-    public Settlement(User giver, User taker, float amount) {
+    public Settlement(){
+        this.settlementID = nextId.incrementAndGet();
+    }
+
+    public Settlement(User giver, User taker, double amount) {
         this.settlementID = nextId.incrementAndGet();
         this.giver = giver;
         this.taker = taker;
@@ -43,11 +47,11 @@ public class Settlement implements Parcelable {
         this.taker = taker;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -61,17 +65,17 @@ public class Settlement implements Parcelable {
         dest.writeInt(this.settlementID);
         dest.writeParcelable(this.giver, 0);
         dest.writeParcelable(this.taker, 0);
-        dest.writeFloat(this.amount);
+        dest.writeDouble(this.amount);
     }
 
     protected Settlement(Parcel in) {
         this.settlementID = in.readInt();
         this.giver = in.readParcelable(User.class.getClassLoader());
         this.taker = in.readParcelable(User.class.getClassLoader());
-        this.amount = in.readFloat();
+        this.amount = in.readDouble();
     }
 
-    public static final Parcelable.Creator<Settlement> CREATOR = new Parcelable.Creator<Settlement>() {
+    public static final Creator<Settlement> CREATOR = new Creator<Settlement>() {
         public Settlement createFromParcel(Parcel source) {
             return new Settlement(source);
         }
