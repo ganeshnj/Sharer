@@ -71,7 +71,7 @@ public class SettlementFragment extends Fragment {
         mListViewSettlements.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        getActivity().setTitle("Settlements");
+        getActivity().setTitle(getString(R.string.Settlements));
     }
 
 }

@@ -4,9 +4,12 @@ import com.ganesh.sharer.models.Currency;
 import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.Group;
 import com.ganesh.sharer.models.Settlement;
+import com.ganesh.sharer.models.Share;
 import com.ganesh.sharer.models.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Ganesh-XPS13 on 2/9/2016.
@@ -107,6 +110,18 @@ public class Repository {
         return null;
     }
 
+    public static ArrayList<Event> getEventsByUserId(int userId) {
+        ArrayList<Event> events = new ArrayList<>();
+        for (Event event: context.getEvents()) {
+            for (Share share: event.getSharers()) {
+                if(share.getSharer().getUserId() == userId){
+                    events.add(event);
+                }
+            }
+        }
+        return events;
+    }
+
     public static boolean updateEvent(Event event) {
         Event e = getEventById(event.getEventID());
         if (e != null){
@@ -202,5 +217,53 @@ public class Repository {
         return true;
     }
 
+    public static double getAllPositive() {
+       double value = 0;
+        for (Event event:  getAllEvents()) {
+            if (event.isEqual() > 0) {
+                value+= event.isEqual();
+            }
+        }
+        return value;
+    }
+
+    public static double getAllPositive(ArrayList<Event> events) {
+        double value = 0;
+        for (Event event:  events) {
+            if (event.isEqual() > 0) {
+                value+= event.isEqual();
+            }
+        }
+        return value;
+    }
+
+    public static double getAllNegative() {
+        double value = 0;
+        for (Event event:  getAllEvents()) {
+            if (event.isEqual() < 0) {
+                value+= event.isEqual();
+            }
+        }
+        return value;
+    }
+
+    public static double getAllNegative(ArrayList<Event> events) {
+        double value = 0;
+        for (Event event:  events) {
+            if (event.isEqual() < 0) {
+                value+= event.isEqual();
+            }
+        }
+        return value;
+    }
+
+    public static double getSettlementByUserId(int userId){
+        double total = 0;
+        for (Settlement settlement: getAllSettlements()) {
+            if (settlement.getTaker().getUserId() == userId)
+                total += settlement.getAmount();
+        }
+        return total;
+    }
 
 }

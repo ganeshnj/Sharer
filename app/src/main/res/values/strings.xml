@@ -17,4 +17,27 @@
     <string name="title_activity_detail_event">DetailEventActivity</string>
     <string name="title_activity_edit_event">EditEventActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="AddAGroup">Add a group</string>
+    <string name="FirstnameRequired">Firstname is required</string>
+    <string name="ThereMustBeAGroup">There must be atleast one member in this group</string>
+    <string name="EventNameRequired">Event name is required</string>
+    <string name="AmountRequired">Amount is required</string>
+    <string name="AmountMismatch">Amount mismatch</string>
+    <string name="AmountMismatchError">Total amount and shared amount should be equal!</string>
+    <string name="Ok">OK</string>
+    <string name="AddFriend">Add a friend</string>
+    <string name="LastnameRequired">Lastname is required</string>
+    <string name="EmailRequired">Email is required</string>
+    <string name="AddSettlement">Add settlement</string>
+    <string name="FriendRequired">A friend is required</string>
+    <string name="EventDetails">Event details</string>
+    <string name="EditEvent">Edit event</string>
+    <string name="EditFriend">Edit a friend</string>
+    <string name="EditGroup">Edit a group</string>
+    <string name="Settings">Settings</string>
+    <string name="Settlements">Settlements</string>
+    <string name="Groups">Groups</string>
+    <string name="Friends">Friends</string>
+    <string name="Events">Events</string>
+    <string name="AddEvent">Add a event</string>
 </resources>

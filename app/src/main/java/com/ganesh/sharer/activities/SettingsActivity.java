@@ -42,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.Settings));
 
         this.mEditTextFirstname = (EditText) findViewById(R.id.editTextFirstname);
         this.mEditTextLastname = (EditText) findViewById(R.id.editTextLastname);
@@ -101,17 +102,17 @@ public class SettingsActivity extends AppCompatActivity {
     private boolean saveSettings(String firstname, String lastname, String email, Currency currency) {
         boolean isError = false;
         if (firstname == null || firstname.isEmpty()){
-            mEditTextFirstname.setError("Firstname is required");
+            mEditTextFirstname.setError(getString(R.string.FirstnameRequired));
             isError = true;
         }
 
         if (lastname == null || lastname.isEmpty()){
-            mEditTextLastname.setError("Lastname is required");
+            mEditTextLastname.setError(getString(R.string.LastnameRequired));
             isError = true;
         }
 
         if (email == null || email.isEmpty()){
-            mEditTextEmail.setError("Email is required");
+            mEditTextEmail.setError(getString(R.string.EmailRequired));
             isError = true;
         }
 

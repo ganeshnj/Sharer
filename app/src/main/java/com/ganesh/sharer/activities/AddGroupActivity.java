@@ -37,7 +37,7 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Add a group");
+        setTitle(getString(R.string.AddAGroup));
 
         mEditTextTitle = (EditText) findViewById(R.id.editTextTitle);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
@@ -77,12 +77,12 @@ public class AddGroupActivity extends AppCompatActivity implements UsersSelectio
     private boolean saveGroup(String title, String description, ArrayList<User> userIds) {
         boolean isError = false;
         if (title == null || title.isEmpty()){
-            mEditTextTitle.setError("Firstname is required");
+            mEditTextTitle.setError(getString(R.string.FirstnameRequired));
             isError = true;
         }
 
         if (userIds.size()==0){
-            mTextViewGroupMembers.setError("There must be atleast one member in this group");
+            mTextViewGroupMembers.setError(getString(R.string.ThereMustBeAGroup));
             isError = true;
         }
 

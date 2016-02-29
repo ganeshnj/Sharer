@@ -19,6 +19,9 @@ import com.ganesh.sharer.models.User;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DetailEventActivity extends AppCompatActivity {
 
     public static final String ARG_EVENT_ID = "event_id";
@@ -33,7 +36,7 @@ public class DetailEventActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Event details");
+        setTitle(getString(R.string.EventDetails));
 
         updateDetails();
     }
@@ -58,13 +61,26 @@ public class DetailEventActivity extends AppCompatActivity {
             mEventId = extras.getInt(ARG_EVENT_ID);
 
             Event event = Repository.getEventById(mEventId);
+
+
             if (event != null){
                 double avg = event.getTotalAmount()/event.getSharers().size();
                 textViewTitle.setText(event.getTitle());
                 textViewDescription.setText(event.getDescription());
                 textViewAmount.setText(currencySign + event.getTotalAmount());
 
+                HashMap<User, Double> map = event.getResults();
                 StringBuilder builder = new StringBuilder();
+                for (Map.Entry<User, Double> entry: map.entrySet()) {
+                    builder.append(entry.getKey().getName() + ": ");
+                    builder.append(entry.getValue()>0?'+':'-');
+                    builder.append(currencySign + Math.abs(entry.getValue()));
+                    builder.append('\n');
+                }
+                TextView textviewStatus = (TextView) findViewById(R.id.textViewStatus);
+                textviewStatus.setText(builder.toString());
+
+                builder = new StringBuilder();
                 for (Share share: event.getSharers()) {
                     double difference = share.getAmount() -avg;
 

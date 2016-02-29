@@ -40,7 +40,7 @@ public class EditGroupActivity extends AppCompatActivity implements UsersSelecti
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Edit a group");
+        setTitle(getString(R.string.EditGroup));
 
 
         mEditTextTitle = (EditText) findViewById(R.id.editTextTitle);
@@ -94,12 +94,12 @@ public class EditGroupActivity extends AppCompatActivity implements UsersSelecti
     private boolean saveGroup(int groupId, String title, String description, ArrayList<User> groupMembers) {
         boolean isError = false;
         if (title == null || title.isEmpty()){
-            mEditTextTitle.setError("Firstname is required");
+            mEditTextTitle.setError(getString(R.string.FirstnameRequired));
             isError = true;
         }
 
         if (groupMembers.size()==0){
-            mTextViewGroupMembers.setError("There must be atleast one member in this group");
+            mTextViewGroupMembers.setError(getString(R.string.ThereMustBeAGroup));
             isError = true;
         }
 

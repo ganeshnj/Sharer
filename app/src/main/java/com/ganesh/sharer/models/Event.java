@@ -3,10 +3,13 @@ package com.ganesh.sharer.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.ganesh.sharer.Repository;
+
 import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,6 +21,15 @@ public class Event implements Parcelable {
     private String title;
     private String description;
     private Calendar createdOn;
+
+    public double getShareAmountByUserId(int userId) {
+        double amount=0;
+        for (Share share: getSharers()) {
+            if (share.getSharer().getUserId() == userId)
+                amount = share.getAmount();
+        }
+        return amount;
+    }
 
     public double getTotalAmount() {
         return totalAmount;
@@ -72,6 +84,10 @@ public class Event implements Parcelable {
         this.createdOn = Calendar.getInstance();
     }
 
+    public double getEventAvg(){
+        return getSharedAmount()/getSharers().size();
+    }
+
     public int getEventID() {
         return eventID;
     }
@@ -120,24 +136,59 @@ public class Event implements Parcelable {
         return  amount;
     }
 
+    public int isEqual() {
+        for (Share share: getSharers()) {
+            if (share.getSharer() == Repository.getLoginedUser()){
+                return (int) (share.getAmount() - getTotalAmount()/getSharers().size());
+            }
+        }
+        return 0;
+    }
+
     public HashMap<User, Double> getResults(){
         HashMap<User, Double> map = new HashMap<>();
         double avg = getTotalAmount()/getSharers().size();
         double[] difference = new double[getSharers().size()];
-        int positive =0, negative =0, neutral=0;
+        double[] positive = new double[getSharers().size()];
+        double[] negative = new double[getSharers().size()];
+        double sumN=0, sumP=0;
+
+        int loginIndex = 0;
         for (int i = 0; i < getSharers().size(); i++) {
+            User user = getSharers().get(i).getSharer();
+            if (user == Repository.getLoginedUser())
+                loginIndex = i;
+
             difference[i] = getSharers().get(i).getAmount() - avg;
 
-            if (difference[i]>0)
-                positive++;
-            else if (difference[i]<0)
-                negative++;
-            else
-                neutral++;
+            if (difference[i] > 0) {
+                positive[i] = difference[i];
+                sumP += difference[i];
+            }
+            else if (difference[i] < 0){
+                negative[i] = difference[i];
+                sumN +=difference[i];
+            }
         }
-        
 
-
+        if (difference[loginIndex] > 0) {
+            for (int i = 0; i < negative.length; i++) {
+                if (i != loginIndex){
+                    User user = getSharers().get(i).getSharer();
+                    double valueToTake = Math.round((negative[i] / sumN) * difference[loginIndex]);
+                    map.put(user, valueToTake);
+                }
+            }    
+        }
+        else if (difference[loginIndex] < 0) {
+            for (int i = 0; i < positive.length; i++) {
+                if (i != loginIndex) {
+                    User user = getSharers().get(i).getSharer();
+                    double valueToGive = Math.round((positive[i]/sumP) * difference[loginIndex]);
+                    map.put(user, valueToGive);
+                }
+            }
+        }
 
         return map;
     }

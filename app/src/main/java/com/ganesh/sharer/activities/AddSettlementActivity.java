@@ -36,7 +36,7 @@ public class AddSettlementActivity extends AppCompatActivity implements UserSele
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setTitle("Add settlement");
+        setTitle(getString(R.string.AddSettlement));
 
         mEditTextAmount = (EditText) findViewById(R.id.editTextAmount);
         mEditTextFriend = (EditText) findViewById(R.id.editTextFriend);
@@ -74,14 +74,14 @@ public class AddSettlementActivity extends AppCompatActivity implements UserSele
     private boolean saveSettlement(User friend, String amount) {
         boolean isError = false;
         if (friend == null){
-            mEditTextFriend.setError("A friend is required");
+            mEditTextFriend.setError(getString(R.string.FriendRequired));
             isError = true;
         }
 
 
 
         if (amount == null || amount.isEmpty()){
-            mEditTextAmount.setError("Email is required");
+            mEditTextAmount.setError(getString(R.string.EmailRequired));
             isError = true;
         }
 

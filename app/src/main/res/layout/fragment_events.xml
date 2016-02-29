@@ -1,8 +1,39 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.EventsFragment">
+    tools:context=".fragments.EventsFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:background="@color/button_material_light">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/textViewPositives"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:textAlignment="center"
+            android:textColor="#008e1c"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/textViewNegatives"
+            android:layout_weight="1"
+            android:layout_margin="4dp"
+            android:textAlignment="center"
+            android:textColor="#bd0000"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
@@ -12,4 +43,4 @@
         tools:listitem="@layout/row_layout_events">
     </ListView>
 
-</FrameLayout>
+</LinearLayout>

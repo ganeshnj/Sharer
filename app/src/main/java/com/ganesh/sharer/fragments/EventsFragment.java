@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
 import com.ganesh.sharer.activities.DetailEventActivity;
 import com.ganesh.sharer.activities.EditFriendActivity;
 import com.ganesh.sharer.adapters.EventsArrayAdapter;
@@ -29,6 +31,8 @@ public class EventsFragment extends Fragment {
 
     private ListView mListViewEvents;
     private EventsArrayAdapter mAdapter;
+    private TextView mTextViewPositives;
+    private TextView mTextViewNegatives;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -85,6 +89,16 @@ public class EventsFragment extends Fragment {
         mAdapter.notifyDataSetChanged();
 
         getActivity().setTitle(mTitle);
+
+        double p = Repository.getAllPositive(mEvents);
+        double n = Repository.getAllNegative(mEvents);
+        String s = Repository.getCurrency().getSymbol();
+
+        mTextViewNegatives = (TextView) view.findViewById(R.id.textViewNegatives);
+        mTextViewNegatives.setText('-' + s + Math.abs(n));
+
+        mTextViewPositives = (TextView) view.findViewById(R.id.textViewPositives);
+        mTextViewPositives.setText('+' + s + p);
     }
 
     @Override

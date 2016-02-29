@@ -82,7 +82,7 @@ public class FriendsFragment extends Fragment {
         mListViewFriends.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        getActivity().setTitle("Friends");
+        getActivity().setTitle(getString(R.string.Friends));
     }
 
     @Override

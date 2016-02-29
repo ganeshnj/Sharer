@@ -108,7 +108,7 @@ public class GroupsFragment extends Fragment {
         });
         mAdapter.notifyDataSetChanged();
 
-        getActivity().setTitle("Groups");
+        getActivity().setTitle(getString(R.string.Groups));
     }
 
     @Override

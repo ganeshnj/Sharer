@@ -9,8 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.ganesh.sharer.R;
+import com.ganesh.sharer.Repository;
+import com.ganesh.sharer.models.Event;
 import com.ganesh.sharer.models.User;
 
+import java.net.ResponseCache;
 import java.util.List;
 
 /**
@@ -55,6 +58,13 @@ public class FriendsArrayAdapter extends ArrayAdapter<User> {
         ViewHolder holder = (ViewHolder) rowView.getTag();
         User user = users.get(position);
         holder.textViewName.setText(user.getFirstname() + " " + user.getLastname());
+
+        double difference = 0;
+        for (Event event: Repository.getEventsByUserId(user.getUserId())) {
+            difference += event.getShareAmountByUserId(user.getUserId()) - event.getEventAvg();
+        }
+
+
         holder.textViewEmail.setText(user.getEmail());
 
         return rowView;

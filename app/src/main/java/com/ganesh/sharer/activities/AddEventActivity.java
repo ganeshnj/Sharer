@@ -53,7 +53,7 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Add a event");
+        setTitle(getString(R.string.AddEvent));
 
         mEditTextEventName = (EditText) findViewById(R.id.editEventName);
         mEditTextDescription = (EditText) findViewById(R.id.editTextDescription);
@@ -131,12 +131,12 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
 
         boolean isError = false;
         if (title == null || title.isEmpty()){
-            mEditTextEventName.setError("Event name is required");
+            mEditTextEventName.setError(getString(R.string.EventNameRequired));
             isError = true;
         }
 
         if (amount == null || amount.isEmpty()){
-            mEditTextAmount.setError("Amount is required");
+            mEditTextAmount.setError(getString(R.string.AmountRequired));
             isError = true;
         }
 
@@ -151,9 +151,9 @@ public class AddEventActivity extends AppCompatActivity implements GroupSelectio
             if (a != mEvent.getSharedAmount())
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(AddEventActivity.this);
-                alert.setTitle("Amount mismatch");
-                alert.setMessage("Total amount and shared amount should be equal!");
-                alert.setPositiveButton("OK",null);
+                alert.setTitle(getString(R.string.AmountMismatch));
+                alert.setMessage(getString(R.string.AmountMismatchError));
+                alert.setPositiveButton(getString(R.string.Ok),null);
                 alert.show();
                 return false;
             }
